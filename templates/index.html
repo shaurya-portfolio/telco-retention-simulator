@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Success & Retention Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #f0f8ff; 
+            color: #003366;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .bg-animation {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .floating-prop {
+            position: absolute; color: #0d6efd; opacity: 0.1; font-size: 3rem;
+            animation: floatUp 15s linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg); }
+            100% { transform: translateY(-10vh) rotate(360deg); }
+        }
+        .prop1 { left: 10%; animation-duration: 12s; }
+        .prop2 { left: 25%; animation-duration: 18s; font-size: 4rem; animation-delay: 2s; }
+        .prop3 { left: 50%; animation-duration: 14s; animation-delay: 5s; }
+        .prop4 { left: 75%; animation-duration: 20s; font-size: 5rem; animation-delay: 0s; }
+        .prop5 { left: 90%; animation-duration: 16s; animation-delay: 3s; }
+
+        .card { 
+            box-shadow: 0 8px 16px rgba(13, 110, 253, 0.1); 
+            border: none; border-radius: 12px; margin-bottom: 25px; 
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+        .card-header {
+            background: linear-gradient(135deg, #0d6efd 0%, #003366 100%) !important;
+            color: white !important;
+            border-top-left-radius: 12px !important; border-top-right-radius: 12px !important;
+        }
+        .table thead th { color: #003366; border-bottom: 2px solid #0d6efd; }
+        .btn-primary { background-color: #0d6efd; border: none; }
+        .btn-primary:hover { background-color: #003366; }
+        .badge-risk { font-size: 1.1em; padding: 10px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="bg-animation">
+    <div class="floating-prop prop1">👤</div>
+    <div class="floating-prop prop2">📉</div>
+    <div class="floating-prop prop3">🔄</div>
+    <div class="floating-prop prop4">💰</div>
+    <div class="floating-prop prop5">📊</div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center fw-bold">Customer Retention Dashboard</h2>
+
+    <!-- SECTION 1: Independent What-If Simulator (Now at the Top) -->
+    <div class="card" id="simulator-section">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">⚙️ Independent What-If Simulator</h5>
+            <span class="badge bg-light text-primary" id="active-profile-badge">Using Default Profile</span>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">Manually test retention strategies or select a customer from the alerts log below to load their profile.</p>
+            
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="fw-bold text-primary">Tenure (Months)</label>
+                    <input type="number" id="sim-tenure" class="form-control border-primary" value="12">
+                </div>
+                <div class="col-md-4">
+                    <label class="fw-bold text-primary">Monthly Charges ($)</label>
+                    <input type="number" id="sim-monthly" class="form-control border-primary" step="0.1" value="75.50">
+                </div>
+                <div class="col-md-4">
+                    <label class="fw-bold text-primary">Offer New Contract</label>
+                    <select id="sim-contract" class="form-select border-primary">
+                        <option value="Month-to-month">Month-to-month</option>
+                        <option value="One year">One year</option>
+                        <option value="Two year">Two year</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary w-100 fw-bold mt-2" onclick="runSimulation()">Run Retention Simulation</button>
+            
+            <div class="mt-4 p-4 rounded border border-primary bg-white" id="sim-results" style="display:none; box-shadow: inset 0 0 10px rgba(13,110,253,0.05);">
+                <h4 class="text-primary mb-3">Simulation Results:</h4>
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="mb-0 fs-5"><strong>Predicted CLV:</strong> <span class="text-success fw-bold">$<span id="res-clv">0</span></span></p>
+                    <p class="mb-0 fs-5"><strong>Risk Status:</strong> <span id="res-risk"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: Static Live Risk Radar -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">🚨 Active Churn Alerts Log</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Customer ID</th>
+                        <th>Tenure</th>
+                        <th>Monthly Charges</th>
+                        <th>Current CLV</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="alerts-table-body">
+                    <!-- Data injected here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // A baseline profile so the simulator works even if no customer is selected
+    let currentCustomerData = {
+        "tenure": 12, "MonthlyCharges": 75.50, "Contract_One_year": 0, "Contract_Two_year": 0,
+        "SeniorCitizen": 0, "gender_Male": 1, "Partner_Yes": 0, "Dependents_Yes": 0,
+        "PhoneService_Yes": 1, "MultipleLines_No_phone_service": 0,"MultipleLines_Yes": 0, "InternetService_Fiber_optic": 1,
+        "InternetService_No": 0, "OnlineSecurity_No_internet_service": 0, "OnlineSecurity_Yes": 0,
+        "OnlineBackup_No_internet_service": 0, "OnlineBackup_Yes": 0, "DeviceProtection_No_internet_service": 0,
+        "DeviceProtection_Yes": 0, "TechSupport_No_internet_service": 0, "TechSupport_Yes": 0,
+        "StreamingTV_No_internet_service": 0, "StreamingTV_Yes": 1, "StreamingMovies_No_internet_service": 0,
+        "StreamingMovies_Yes": 1, "PaperlessBilling_Yes": 1, "PaymentMethod_Credit_card_automatic": 0,
+        "PaymentMethod_Electronic_check": 1, "PaymentMethod_Mailed_check": 0
+    };
+
+    window.onload = function() {
+        fetch('/api/latest_alerts')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('alerts-table-body');
+                if(data.message) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted fw-bold py-4">${data.message}</td></tr>`;
+                    return;
+                }
+                
+                data.forEach((customer) => {
+                    // Fallback to "Unknown" if customerID isn't in your dataset yet
+                    const custID = customer.customerID || 'Unknown'; 
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="text-secondary">${custID}</td>
+                        <td class="fw-bold">${customer.tenure} m</td>
+                        <td>$${customer.MonthlyCharges.toFixed(2)}</td>
+                        <td class="text-danger fw-bold">$${customer.Predicted_CLV.toFixed(2)}</td>
+                        <td><button class="btn btn-sm btn-outline-primary fw-bold px-3" onclick='loadToSimulator(${JSON.stringify(customer)})'>Load to Simulator</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+    };
+
+    function loadToSimulator(customer) {
+        // Overwrite the baseline with the selected customer's actual data
+        currentCustomerData = { ...currentCustomerData, ...customer }; 
+        
+        document.getElementById('sim-tenure').value = customer.tenure;
+        document.getElementById('sim-monthly').value = customer.MonthlyCharges;
+        
+        if(customer.Contract_One_year == 1) document.getElementById('sim-contract').value = "One year";
+        else if(customer.Contract_Two_year == 1) document.getElementById('sim-contract').value = "Two year";
+        else document.getElementById('sim-contract').value = "Month-to-month";
+        
+        // Update UI badge
+        const custID = customer.customerID || 'Selected Customer';
+        document.getElementById('active-profile-badge').innerText = `Target: ${custID}`;
+        document.getElementById('simulator-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function runSimulation() {
+        currentCustomerData.tenure = parseFloat(document.getElementById('sim-tenure').value);
+        currentCustomerData.MonthlyCharges = parseFloat(document.getElementById('sim-monthly').value);
+        
+        const contract = document.getElementById('sim-contract').value;
+        currentCustomerData.Contract_One_year = (contract === "One year") ? 1 : 0;
+        currentCustomerData.Contract_Two_year = (contract === "Two year") ? 1 : 0;
+
+        fetch('/api/simulate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(currentCustomerData)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if(result.status === 'success') {
+                document.getElementById('sim-results').style.display = 'block';
+                document.getElementById('res-clv').innerText = result.new_clv;
+                
+                const riskBadge = document.getElementById('res-risk');
+                if(result.new_churn_risk === 1) {
+                    riskBadge.innerHTML = '<span class="badge bg-danger badge-risk shadow-sm">High Risk (1)</span>';
+                } else {
+                    riskBadge.innerHTML = '<span class="badge bg-success badge-risk shadow-sm">Retained (0)</span>';
+                }
+            } else {
+                alert("Error running simulation: " + result.message);
+            }
+        });
+    }
+</script>
+</body>
+</html>

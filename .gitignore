@@ -1,0 +1,12 @@
+# Security & Credentials
+.env
+config/gcp_credentials.json
+
+# State Management
+config/pipeline_offset.txt
+
+
+# Python & Jupyter Cache
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/

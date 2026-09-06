@@ -1,0 +1,5 @@
+pandas
+numpy
+scikit-learn
+google-cloud-bigquery
+python-dotenv
