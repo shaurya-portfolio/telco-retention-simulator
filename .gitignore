@@ -4,7 +4,7 @@ config/gcp_credentials.json
 
 # State Management
 config/pipeline_offset.txt
-
+.vscode/
 
 # Python & Jupyter Cache
 __pycache__/
