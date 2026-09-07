@@ -82,7 +82,7 @@ if not high_value_at_risk.empty:
    print("Triggering Email alert to Retention Team...")
 
    msg = EmailMessage()
-   msg.set_content(f"URGENT:\n\n{len(high_value_at_risk)} High-Value customers (CLV > $2000) are predicted to churn in today's batch.\n\nClick here to view full profiles and run what-if scenarios:\n👉 http://127.0.0.1:5000\n\nInitiate retention protocols immediately.")   
+   msg.set_content(f"URGENT:\n\n{len(high_value_at_risk)} High-Value customers (CLV > $2000) are predicted to churn in today's batch.\n\nClick here to view full profiles and run what-if scenarios:\n👉https://telco-retention-simulator.onrender.com/\n\nInitiate retention protocols immediately.")   
    msg['Subject'] = '🚨 Automated Alert: High-Value Churn Risk Detected'
    msg['From'] = 'shauryasinhaop@gmail.com'
    msg['To'] = 'shauryasinha070@gmail.com'
