@@ -2,8 +2,8 @@ name: Automated Customer Retention Pipeline
 
 on:
   schedule:
-    - cron: '0 9 * * *' 
-  workflow_dispatch: 
+    - cron: '0 9 * * *'
+  workflow_dispatch:
 
 jobs:
   run-pipeline:
@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11' # Upgraded to fix the Google API warning
 
       - name: Install Dependencies
         run: |
@@ -23,9 +23,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: Inject GCP Credentials Secret
+        env:
+          GCP_CREDS: ${{ secrets.GCP_CREDENTIALS_JSON }}
         run: |
           mkdir -p config
-          echo "${{ secrets.GCP_CREDENTIALS_JSON }}" > config/gcp_credentials.json
+          echo "$GCP_CREDS" > config/gcp_credentials.json
 
       - name: Run Main Pipeline
         env:
