@@ -35,3 +35,11 @@ jobs:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         run: |
           python main_pipeline.py
+      - name: Commit and Push Updated State
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add config/pipeline_offset.txt
+          git add data/latest_alerts.csv  # Agar root folder mein hai toh sirf latest_alerts.csv likhna
+          git commit -m "Auto-update pipeline offset and daily alerts [skip ci]" || echo "No changes to commit"
+          git push
