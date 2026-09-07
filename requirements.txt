@@ -4,3 +4,5 @@ scikit-learn
 google-cloud-bigquery
 python-dotenv
 db-dtypes
+Flask
+gunicorn 
