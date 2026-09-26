@@ -1,6 +1,8 @@
 SeniorCitizen,tenure,MonthlyCharges,TotalCharges,Churn,gender_Male,Partner_Yes,Dependents_Yes,PhoneService_Yes,MultipleLines_No_phone_service,MultipleLines_Yes,InternetService_Fiber_optic,InternetService_No,OnlineSecurity_No_internet_service,OnlineSecurity_Yes,OnlineBackup_No_internet_service,OnlineBackup_Yes,DeviceProtection_No_internet_service,DeviceProtection_Yes,TechSupport_No_internet_service,TechSupport_Yes,StreamingTV_No_internet_service,StreamingTV_Yes,StreamingMovies_No_internet_service,StreamingMovies_Yes,Contract_One_year,Contract_Two_year,PaperlessBilling_Yes,PaymentMethod_Credit_card_automatic,PaymentMethod_Electronic_check,PaymentMethod_Mailed_check,customerID,Predicted_Churn_Risk,Predicted_CLV
-0,33,79.0,2576.8,0,1,0,0,1,0,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,1,0,0,CUST-22076,1,2861.196478517155
-1,29,79.3,2414.55,0,1,1,0,1,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,CUST-31306,1,2302.511349353577
-1,34,79.6,2718.3,1,0,1,1,1,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,1,CUST-15879,1,2947.9820649155486
-0,42,79.9,3313.4,0,1,0,0,1,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,CUST-23295,1,3152.520757284973
-0,46,80.0,3769.7,0,1,1,1,1,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,CUST-74634,1,3490.4402721353954
+0,29,80.15,2265.25,1,1,1,0,1,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,CUST-83967,1,2499.334822488039
+1,32,80.3,2483.05,1,1,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,0,0,CUST-90331,1,2429.628070052584
+1,47,80.35,3825.85,1,0,1,0,1,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,CUST-93512,1,3414.1564189192904
+0,23,81.0,1917.1,1,1,0,0,1,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,0,CUST-85753,1,2034.885815537608
+0,27,81.3,2272.8,0,1,0,0,1,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,0,CUST-86390,1,2290.9430459549476
+1,27,81.45,2122.05,1,1,0,0,1,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,0,CUST-24748,1,2349.4118678031778
+1,35,81.6,2815.25,0,1,1,0,1,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,CUST-60283,1,2810.756359671635
